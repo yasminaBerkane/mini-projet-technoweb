@@ -69,4 +69,15 @@ public interface MedicamentRepository extends JpaRepository<Medicament, Integer>
      """)
     List<Medicament> medicamentsDisponibles();
 
+    /**
+     * Retourne les médicaments dont le stock est inférieur ou égal
+     * au niveau de réapprovisionnement.
+     */
+    @Query("""
+        SELECT m FROM Medicament m
+        WHERE m.unitesEnStock <= m.niveauDeReappro
+    """)
+    List<Medicament> medicamentsAReapprovisionner();
+
+
 }
