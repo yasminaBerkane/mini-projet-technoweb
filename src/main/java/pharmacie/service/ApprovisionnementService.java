@@ -1,6 +1,9 @@
 package pharmacie.service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -8,7 +11,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import pharmacie.dao.MedicamentRepository;
-import pharmacie.entity.*;
+import pharmacie.entity.Categorie;
+import pharmacie.entity.Fournisseur;
+import pharmacie.entity.Medicament;
 
 @Service
 public class ApprovisionnementService {
@@ -33,12 +38,13 @@ public class ApprovisionnementService {
 
         for (Medicament m : aCommander) {
             Categorie categorie = m.getCategorie();
-            Fournisseur fournisseur = m.getFournisseur();
 
-            regroupement
-                .computeIfAbsent(fournisseur, f -> new HashMap<>())
-                .computeIfAbsent(categorie, c -> new ArrayList<>())
-                .add(m);
+            for (Fournisseur fournisseur : categorie.getFournisseurs()) {
+                regroupement
+                    .computeIfAbsent(fournisseur, f -> new HashMap<>())
+                    .computeIfAbsent(categorie, c -> new ArrayList<>())
+                    .add(m);
+            }
         }
 
         regroupement.forEach(this::envoyerMail);
