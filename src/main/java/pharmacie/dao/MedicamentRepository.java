@@ -79,10 +79,6 @@ public interface MedicamentRepository extends JpaRepository<Medicament, Integer>
     """)
     List<Medicament> medicamentsAReapprovisionner();
 
-    @Query("""
-        SELECT m FROM Medicament m
-        WHERE m.categorie.code = :codeCategorie
-    """)
     List<Medicament> findByNomContainingIgnoreCase(String nom);
 
 }
