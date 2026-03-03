@@ -184,12 +184,12 @@ INSERT INTO LIGNE (COMMANDE_NUMERO, MEDICAMENT_REFERENCE, QUANTITE) VALUES
 
 -- Insertion des fournisseurs
 INSERT INTO FOURNISSEUR (id, nom, email) VALUES
-(1, 'PharmaPlus International', 'contact@pharmaplus.com'),
-(2, 'MediGlobal Afrique', 'info@mediglobal.africa'),
-(3, 'BioSanté Distribution', 'contact@biosante.com'),
-(4, 'SantéSud Fournitures', 'service@santesud.sn'),
-(5, 'AfricMed Trading', 'sales@africmed.com'),
-(6, 'Universal Pharma Supply', 'contact@universalpharma.com');
+(1, 'PharmaPlus International', 'yasminabke2005@gmail.com'),
+(2, 'MediGlobal Afrique', 'yasminabke2005+fournisseur1@gmail.com'),
+(3, 'BioSanté Distribution', 'yasminabke2005+fournisseur2@gmail.com'),
+(4, 'SantéSud Fournitures', 'yasminabke2005+fournisseur3@gmail.com'),
+(5, 'AfricMed Trading', 'yasminabke2005+fournisseur4@gmail.com'),
+(6, 'Universal Pharma Supply', 'yasminabke2005+fournisseur5@gmail.com');
 ALTER TABLE FOURNISSEUR ALTER COLUMN id RESTART WITH 7;
 
 -- Associations fournisseurs / catégories
