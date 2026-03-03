@@ -31,7 +31,7 @@ public class ApprovisionnementService {
      * - envoie un mail par fournisseur
      */
     public void lancerApprovisionnement() {
-
+        System.out.println("Méthode appelée !");
         List<Medicament> aCommander = medicamentRepository.medicamentsAReapprovisionner();
 
         Map<Fournisseur, Map<Categorie, List<Medicament>>> regroupement = new HashMap<>();
