@@ -6,9 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.sendgrid.Method;
+import com.sendgrid.Request;
+import com.sendgrid.Response;
+import com.sendgrid.SendGrid;
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Email;
 
 import pharmacie.dao.MedicamentRepository;
 import pharmacie.entity.Categorie;
@@ -21,17 +28,13 @@ public class ApprovisionnementService {
     @Autowired
     private MedicamentRepository medicamentRepository;
 
-    @Autowired
-    private JavaMailSender mailSender;
+    @Value("${sendgrid.api-key}")
+    private String sendGridApiKey;
 
-    /**
-     * Lance le processus de réapprovisionnement :
-     * - cherche les médicaments sous le seuil
-     * - regroupe par fournisseur et par catégorie
-     * - envoie un mail par fournisseur
-     */
+    @Value("${sendgrid.from-email}")
+    private String fromEmail;
+
     public void lancerApprovisionnement() {
-        System.out.println("Méthode appelée !");
         List<Medicament> aCommander = medicamentRepository.medicamentsAReapprovisionner();
 
         Map<Fournisseur, Map<Categorie, List<Medicament>>> regroupement = new HashMap<>();
@@ -53,26 +56,53 @@ public class ApprovisionnementService {
     private void envoyerMail(Fournisseur fournisseur,
                              Map<Categorie, List<Medicament>> data) {
 
-        StringBuilder contenu = new StringBuilder();
-        contenu.append("Bonjour ").append(fournisseur.getNom()).append(",\n\n");
-        contenu.append("Merci de nous transmettre un devis pour les médicaments suivants :\n\n");
+        try {
+            StringBuilder contenu = new StringBuilder();
 
-        data.forEach((categorie, meds) -> {
-            contenu.append("Catégorie : ").append(categorie.getLibelle()).append("\n");
-            meds.forEach(m ->
-                contenu.append(" - ").append(m.getNom())
-                       .append(" (stock: ").append(m.getUnitesEnStock())
-                       .append(", seuil: ").append(m.getNiveauDeReappro())
-                       .append(")\n")
-            );
-            contenu.append("\n");
-        });
+            contenu.append("Bonjour ").append(fournisseur.getNom()).append(",\n\n");
+            contenu.append("Merci de nous transmettre un devis pour les médicaments suivants :\n\n");
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(fournisseur.getEmail());
-        message.setSubject("Demande de devis – Réapprovisionnement pharmacie");
-        message.setText(contenu.toString());
+            data.forEach((categorie, meds) -> {
+                contenu.append("Catégorie : ")
+                        .append(categorie.getLibelle())
+                        .append("\n");
 
-        mailSender.send(message);
+                meds.forEach(m ->
+                        contenu.append(" - ").append(m.getNom())
+                                .append(" (stock: ")
+                                .append(m.getUnitesEnStock())
+                                .append(", seuil: ")
+                                .append(m.getNiveauDeReappro())
+                                .append(")\n")
+                );
+
+                contenu.append("\n");
+            });
+
+            Email from = new Email(fromEmail);
+            Email to = new Email(fournisseur.getEmail());
+            Content content = new Content("text/plain", contenu.toString());
+
+            Mail mail = new Mail(from,
+                    "Demande de devis – Réapprovisionnement pharmacie",
+                    to,
+                    content);
+
+            SendGrid sg = new SendGrid(sendGridApiKey);
+
+            Request request = new Request();
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+
+            Response response = sg.api(request);
+
+            if (response.getStatusCode() < 200 || response.getStatusCode() >= 300) {
+                System.err.println("Erreur SendGrid : " + response.getBody());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

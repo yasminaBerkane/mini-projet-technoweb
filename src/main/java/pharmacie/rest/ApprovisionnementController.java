@@ -16,9 +16,6 @@ public class ApprovisionnementController {
     @Autowired
     private ApprovisionnementService service;
 
-    /**
-     * Déclenche le service métier d'approvisionnement.
-     */
     @PostMapping("/lancer")
     public ResponseEntity<String> lancerApprovisionnement() {
         service.lancerApprovisionnement();
