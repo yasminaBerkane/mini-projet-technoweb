@@ -181,3 +181,30 @@ INSERT INTO LIGNE (COMMANDE_NUMERO, MEDICAMENT_REFERENCE, QUANTITE) VALUES
 (6, 6, 110), (6, 16, 65), (6, 26, 85), (6, 36, 60), (6, 91, 70),
 (7, 7, 80), (7, 17, 50), (7, 27, 95), (7, 37, 55), (7, 100, 45),
 (8, 8, 100), (8, 18, 75), (8, 28, 80), (8, 38, 70), (8, 48, 60);
+
+-- Insertion des fournisseurs
+INSERT INTO FOURNISSEUR (id, nom, email) VALUES
+(1, 'PharmaPlus International', 'contact@pharmaplus.com'),
+(2, 'MediGlobal Afrique', 'info@mediglobal.africa'),
+(3, 'BioSanté Distribution', 'contact@biosante.com'),
+(4, 'SantéSud Fournitures', 'service@santesud.sn'),
+(5, 'AfricMed Trading', 'sales@africmed.com'),
+(6, 'Universal Pharma Supply', 'contact@universalpharma.com');
+ALTER TABLE FOURNISSEUR ALTER COLUMN id RESTART WITH 7;
+
+-- Associations fournisseurs / catégories
+INSERT INTO FOURNISSEUR_CATEGORIE (fournisseur_id, categorie_code) VALUES
+(1,1), (2,1),
+(1,2), (3,2),
+(2,3), (4,3),
+(3,4), (5,4),
+(4,5), (6,5),
+(2,6), (5,6),
+(1,7), (6,7),
+(3,8), (4,8),
+(5,9), (6,9),
+(1,10), (2,10);
+
+UPDATE MEDICAMENT  
+SET UNITES_EN_STOCK = 10
+WHERE NOM = 'Paracétamol 500mg';
