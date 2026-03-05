@@ -69,6 +69,7 @@ public class ApprovisionnementService {
         });
 
         SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("yasminabke2005@gmail.com");
         message.setTo(fournisseur.getEmail());
         message.setSubject("Demande de devis – Réapprovisionnement pharmacie");
         message.setText(contenu.toString());
