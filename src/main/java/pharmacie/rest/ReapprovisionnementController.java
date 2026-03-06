@@ -7,19 +7,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import pharmacie.service.ApprovisionnementService;
+import pharmacie.service.ReapprovisionnementService;
 
 @RestController
-@RequestMapping("/api/approvisionnement")
-public class ApprovisionnementController {
+@RequestMapping("/api/reapprovisionnement")
+public class ReapprovisionnementController {
 
     @Autowired
-    private ApprovisionnementService service;
+    private ReapprovisionnementService service;
 
     @PostMapping("/lancer")
-    public ResponseEntity<String> lancerApprovisionnement() {
-        service.lancerApprovisionnement();
-        return ResponseEntity.ok("Approvisionnement lancé : mails envoyés aux fournisseurs 📧");
+    public ResponseEntity<String> lancerReapprovisionnement() {
+        service.lancerReapprovisionnement();
+        return ResponseEntity.ok("Reapprovisionnement lancé : mails envoyés aux fournisseurs 📧");
     }
 
     @GetMapping("/test")

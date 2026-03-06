@@ -16,7 +16,7 @@ import pharmacie.entity.Fournisseur;
 import pharmacie.entity.Medicament;
 
 @Service
-public class ApprovisionnementService {
+public class ReapprovisionnementService {
 
     @Autowired
     private MedicamentRepository medicamentRepository;
@@ -30,7 +30,7 @@ public class ApprovisionnementService {
      * - regroupe par fournisseur et par catégorie
      * - envoie un mail par fournisseur
      */
-    public void lancerApprovisionnement() {
+    public void lancerReapprovisionnement() {
         System.out.println("Méthode appelée !");
         List<Medicament> aCommander = medicamentRepository.medicamentsAReapprovisionner();
 
