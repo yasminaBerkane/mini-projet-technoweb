@@ -205,6 +205,7 @@ INSERT INTO FOURNISSEUR_CATEGORIE (fournisseur_id, categorie_code) VALUES
 (5,9), (6,9),
 (1,10), (2,10);
 
+-- Modification pour tester les mails de reapprovisionnement
 UPDATE MEDICAMENT  
 SET UNITES_EN_STOCK = 10
 WHERE NOM = 'Paracétamol 500mg';
